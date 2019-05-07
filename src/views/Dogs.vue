@@ -12,18 +12,25 @@ export default {
   }),
   mounted() {
     axios.get('https://dog.ceo/api/breeds/list/all').then(response => {
-      let breeds = response.data.message
+      const breeds = response.data.message
 
       for (const breed in breeds) {
         const subbreeds = []
         if (breeds[breed].length > 0) {
           for (const subbreed in breeds[breed]) {
-            subbreeds.push({ name: breeds[breed][subbreed] })
+            let subbreedName = this.ucFirst(breeds[breed][subbreed])
+            subbreeds.push({ name: subbreedName })
           }
         }
-        this.items.push({ name: breed, children: subbreeds })
+        let breedName = this.ucFirst(breed)
+        this.items.push({ name: breedName, children: subbreeds })
       }
     })
+  },
+  methods: {
+    ucFirst: function(text) {
+      return `${text.charAt(0).toUpperCase()}${text.slice(1)}`
+    }
   }
 }
 </script>
