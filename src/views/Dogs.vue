@@ -1,31 +1,31 @@
 <template>
-  <v-app>
-    <v-content>
-      <div class="dogs">
-        <ul id="example-1">
-          <li v-for="(subbreed, breed) in items">{{ breed }} {{ subbreed }}</li>
-        </ul>
-      </div>
-    </v-content>
-  </v-app>
+  <v-treeview v-model="tree" :items="items" open-on-click></v-treeview>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 export default {
-  name: "Dogs",
-  data() {
-    return {
-      items: null
-    };
-  },
+  name: 'Dogs',
+  data: () => ({
+    tree: [],
+    items: []
+  }),
   mounted() {
-    axios.get("https://dog.ceo/api/breeds/list/all").then(response => {
-      console.log(response.data);
-      this.items = response.data.message;
-    });
+    axios.get('https://dog.ceo/api/breeds/list/all').then(response => {
+      let breeds = response.data.message
+
+      for (const breed in breeds) {
+        const subbreeds = []
+        if (breeds[breed].length > 0) {
+          for (const subbreed in breeds[breed]) {
+            subbreeds.push({ name: breeds[breed][subbreed] })
+          }
+        }
+        this.items.push({ name: breed, children: subbreeds })
+      }
+    })
   }
-};
+}
 </script>
 
 <style scoped></style>
