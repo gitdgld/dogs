@@ -16,6 +16,9 @@
           max-height="250"
           contain
         />
+        <v-btn color="orange darken-2" dark @click="reloadImage()">
+          <v-icon dark left rounded>sync</v-icon>Reload
+        </v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -48,6 +51,12 @@ export default {
     },
     ucFirst: function(text) {
       return `${text.charAt(0).toUpperCase()}${text.slice(1)}`
+    },
+    reloadImage() {
+      let path = `https://dog.ceo/api/breed/${this.breedName}/images/random`
+      axios
+        .get(path)
+        .then(response => (this.breedImage = response.data.message))
     }
   },
   mounted() {
